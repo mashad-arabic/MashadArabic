@@ -1,9 +1,41 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Her kullanıcı yalnızca kendi profil belgesini okuyup yazabilir
+
+    function girisli() {
+      return request.auth != null;
+    }
+
+    // Yönetici: yoneticiler/{uid} belgesi olan kullanıcı.
+    // Bu belgeler yalnızca Firebase konsolundan eklenebilir.
+    function yonetici() {
+      return girisli() && exists(/databases/$(database)/documents/yoneticiler/$(request.auth.uid));
+    }
+
+    // Kullanıcı profilleri: herkes kendi profilini okur/yazar, yönetici hepsini okur
     match /kullanicilar/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read: if girisli() && (request.auth.uid == uid || yonetici());
+      allow write: if girisli() && request.auth.uid == uid;
+    }
+
+    // Yönetici listesi: kişi yalnızca kendisinin yönetici olup olmadığını görebilir
+    match /yoneticiler/{uid} {
+      allow read: if girisli() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Klipler: herkes okur (oyun için), yalnızca yönetici ekler/düzenler/siler
+    match /klipler/{id} {
+      allow read: if true;
+      allow create, update: if yonetici()
+        && request.resource.data.youtube is string
+        && request.resource.data.start is number
+        && request.resource.data.end is number
+        && request.resource.data.end > request.resource.data.start
+        && request.resource.data.arapca is string
+        && request.resource.data.dogru is string
+        && request.resource.data.yanlis is string;
+      allow delete: if yonetici();
     }
   }
 }

@@ -1,4 +1,4 @@
-// VoArabic oyun akışı: klip kendiliğinden oynar ve son karede durur,
+// MashadArabic oyun akışı: klip kendiliğinden oynar ve son karede durur,
 // bitince iki çeviri çıkar, biri seçilince sonuç gösterilir,
 // ← / → oklarıyla önceki ya da sonraki klibe geçilir.
 // Altyazılı modda klibin Arapça cümlesi videonun altında durur;
@@ -17,7 +17,6 @@ const el = {
   sayac: document.getElementById("sayac"),
   modAltyazili: document.getElementById("modAltyazili"),
   modAltyazisiz: document.getElementById("modAltyazisiz"),
-  puan: document.getElementById("puan"),
   artis: document.getElementById("artis"),
   seri: document.getElementById("seri"),
   seriRozet: document.getElementById("seriRozet"),
@@ -49,7 +48,7 @@ function skoruIsle(dogru) {
     seri++;
     kazanc = puanHesapla();
     puan += kazanc;
-    artisGoster(`+${kazanc}`);
+    artisGoster(`+${kazanc}`); // sağ üstteki profil kartında süzülür
     parlat(el.seriRozet);
   } else {
     seri = 0;
@@ -60,7 +59,6 @@ function skoruIsle(dogru) {
 
 function skoruGoster() {
   const enIyi = Profil.enIyiSeri();
-  el.puan.textContent = puan;
   el.seri.textContent = seri;
   el.enIyi.textContent = enIyi ? `en iyi ${enIyi}` : "";
 }
@@ -119,13 +117,37 @@ function modUygula() {
   // Altyazısız: cümle ancak cevaptan sonra çıkar.
   // Gizliyken de yer tutar ki şıklar aşağı kaymasın.
   el.altyazi.hidden = !klip;
-  el.altyazi.classList.toggle("bekliyor", !((altyaziliMod && seceneklerAcik) || cevaplandi));
+  // Klip oynarken (tekrar dinlerken de) hiçbir şey görünmez.
+  el.altyazi.classList.toggle("bekliyor", !(seceneklerAcik && (altyaziliMod || cevaplandi)));
   el.altyazi.textContent = klip ? klip.arapca : "";
 }
 
 el.modAltyazili.addEventListener("click", () => modSec(true));
 el.modAltyazisiz.addEventListener("click", () => modSec(false));
 modUygula();
+
+// ---------- Klipler hazır mı? ----------
+// Klipler Firestore'dan gelir (hesap.js "klipler-hazir" olayıyla bildirir).
+// Firestore'da klip yoksa ya da ulaşılamazsa data.js'deki örnek klipler kullanılır.
+let oynaticiHazir = false;
+let kliplerHazir = false;
+
+function baslaHazirla() {
+  if (!oynaticiHazir || !kliplerHazir) return;
+  el.basla.disabled = false;
+  el.basla.textContent = "▶ Başla";
+}
+
+function kliplerGeldi(liste) {
+  if (kliplerHazir) return;
+  if (Array.isArray(liste) && liste.length) KLIPLER.splice(0, KLIPLER.length, ...liste);
+  kliplerHazir = true;
+  baslaHazirla();
+}
+
+document.addEventListener("klipler-hazir", (e) => kliplerGeldi(e.detail));
+// Hesap modülü hiç yanıt vermezse 5 sn sonra örnek kliplerle devam et
+setTimeout(() => kliplerGeldi(null), 5000);
 
 // ---------- YouTube oynatıcısı ----------
 function onYouTubeIframeAPIReady() {
@@ -137,8 +159,8 @@ function onYouTubeIframeAPIReady() {
     },
     events: {
       onReady: () => {
-        el.basla.disabled = false;
-        el.basla.textContent = "▶ Başla";
+        oynaticiHazir = true;
+        baslaHazirla();
       },
       onStateChange: (e) => {
         if (e.data === YT.PlayerState.PLAYING) bitisiIzle();
@@ -169,6 +191,11 @@ function bitisiIzle() {
 
 function klibiOynat() {
   klipBasladi = false;
+  // Tekrar dinlerken şıklar, oklar ve altyazı gizlenir; klip bitince geri gelir.
+  seceneklerAcik = false;
+  el.secenekler.classList.add("bekliyor");
+  el.gecis.classList.add("bekliyor");
+  modUygula();
   player.seekTo(klip.start, true);
   player.playVideo();
 }
@@ -187,6 +214,7 @@ function seceneklariGoster() {
   seceneklerAcik = true;
   secenekZamani = performance.now();
   el.secenekler.classList.remove("bekliyor");
+  if (cevaplandi) el.gecis.classList.remove("bekliyor"); // cevaplanmış klibi tekrar dinlediyse
   modUygula(); // altyazılı modda cümleyi şimdi göster
 }
 

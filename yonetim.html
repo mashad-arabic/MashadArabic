@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MashadArabic Yönetim</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Üst şerit (HUD): logo ve kullanıcı -->
+  <header class="hud">
+    <div class="hud-ic genis">
+      <a href="./" class="hud-logo"><h1>Mashad<span>Arabic</span> <small class="baslik-ek">Yönetim</small></h1></a>
+      <div class="hud-sag">
+        <span id="kim" class="hud-soluk"></span>
+        <a class="hud-dugme" href="./">← Oyuna dön</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="sahne genis-sahne">
+
+    <p id="durum" class="durum-kutu">Yükleniyor…</p>
+
+    <div id="icerik" hidden>
+      <div class="sekmeler yonetim-sekmeler" role="tablist">
+        <button id="sekmeKlipler" class="sekme aktif" role="tab">Klipler</button>
+        <button id="sekmeKullanicilar" class="sekme" role="tab">Kullanıcılar</button>
+      </div>
+
+      <!-- ================= KLİPLER ================= -->
+      <section id="bolumKlipler">
+        <div class="yonetim-izgara">
+          <form id="klipForm" class="kart-kutu" novalidate>
+            <h2 id="formBaslik">Yeni klip</h2>
+
+            <label class="alan">
+              <span>YouTube bağlantısı ya da video kimliği</span>
+              <input id="fYoutube" type="text" placeholder="https://www.youtube.com/watch?v=... veya dinQIb4ZFXY" autocomplete="off">
+            </label>
+
+            <div class="iki-alan">
+              <label class="alan">
+                <span>Başlangıç (sn)</span>
+                <input id="fStart" type="number" step="0.05" min="0" placeholder="27.9">
+              </label>
+              <label class="alan">
+                <span>Bitiş (sn)</span>
+                <input id="fEnd" type="number" step="0.05" min="0" placeholder="32.1">
+              </label>
+            </div>
+
+            <div class="onizleme-kutu">
+              <div id="onizleme"></div>
+            </div>
+            <div class="onizleme-dugmeler">
+              <button type="button" id="onizleBtn" class="ok">▶ Klibi önizle</button>
+              <button type="button" id="baslangicYap" class="ok kucuk" title="Videonun şu anki saniyesini başlangıç yap">⇤ Şu an = başlangıç</button>
+              <button type="button" id="bitisYap" class="ok kucuk" title="Videonun şu anki saniyesini bitiş yap">Şu an = bitiş ⇥</button>
+            </div>
+
+            <label class="alan">
+              <span>Arapça cümle</span>
+              <input id="fArapca" type="text" dir="rtl" lang="ar" class="arapca-giris">
+            </label>
+            <label class="alan">
+              <span>Doğru çeviri</span>
+              <input id="fDogru" type="text">
+            </label>
+            <label class="alan">
+              <span>Yanlış çeviri (çeldirici)</span>
+              <input id="fYanlis" type="text">
+            </label>
+
+            <p id="formMesaj" class="mesaj" hidden></p>
+
+            <div class="form-dugmeler">
+              <button type="submit" id="kaydetBtn" class="ok ana">Klibi ekle</button>
+              <button type="button" id="vazgecBtn" class="ok" hidden>Vazgeç</button>
+            </div>
+          </form>
+
+          <div class="kart-kutu">
+            <div class="liste-ust">
+              <h2>Klipler <span id="klipSayisi" class="soluk-yazi"></span></h2>
+              <button id="iceAktarBtn" class="ok kucuk" hidden>Örnek klipleri içe aktar</button>
+            </div>
+            <div class="tablo-kap">
+              <table class="tablo">
+                <thead>
+                  <tr><th>Arapça</th><th>Doğru çeviri</th><th>Aralık</th><th></th></tr>
+                </thead>
+                <tbody id="klipTablo"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= KULLANICILAR ================= -->
+      <section id="bolumKullanicilar" hidden>
+        <div class="kart-kutu">
+          <div class="liste-ust">
+            <h2>Kullanıcılar <span id="kullaniciSayisi" class="soluk-yazi"></span></h2>
+            <button id="yenileBtn" class="ok kucuk">↻ Yenile</button>
+          </div>
+          <div class="tablo-kap">
+            <table class="tablo">
+              <thead>
+                <tr><th>Ad</th><th>E-posta</th><th>Toplam puan</th><th>Cevaplanan</th><th>Doğruluk</th><th>En iyi seri</th><th>Son etkinlik</th></tr>
+              </thead>
+              <tbody id="kullaniciTablo"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script type="module" src="yonetim.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>

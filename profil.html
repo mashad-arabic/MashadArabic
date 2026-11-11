@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profilim · MashadArabic</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Üst şerit (HUD): logo ve kullanıcı -->
+  <header class="hud">
+    <div class="hud-ic dar">
+      <a href="./" class="hud-logo"><h1>Mashad<span>Arabic</span></h1></a>
+      <a href="./" class="hud-dugme">← Oyuna dön</a>
+    </div>
+  </header>
+
+  <main class="sahne profil-sahne">
+
+    <!-- Kimlik: büyük avatar, ad, puan -->
+    <section class="profil-bas">
+      <div id="pAvatar" class="dev-avatar"></div>
+      <div class="profil-bas-metin">
+        <input id="pAd" class="ad-girisi" type="text" maxlength="24" placeholder="Adını yaz" autocomplete="off" aria-label="Adın">
+        <p class="profil-alt">
+          <span><span data-ikon="yildiz"></span> <b id="pToplam">0</b> puan</span>
+          <span id="pDurum" class="soluk-yazi"></span>
+        </p>
+      </div>
+    </section>
+
+    <section class="profil-kart">
+      <h2>Profil fotoğrafı</h2>
+      <div id="pAvatarlar" class="avatarlar"></div>
+    </section>
+
+    <section class="profil-kart">
+      <h2>İstatistikler</h2>
+      <div class="istatistikler">
+        <div class="kutu"><b id="pBugun">0</b><span>Bugünkü puan</span></div>
+        <div class="kutu"><b id="pGunSeri">0</b><span><i data-ikon="takvim"></i> Gün serisi</span></div>
+        <div class="kutu"><b id="pEnIyi">0</b><span><i data-ikon="alev"></i> En iyi seri</span></div>
+        <div class="kutu"><b id="pCevaplanan">0</b><span>Cevaplanan</span></div>
+        <div class="kutu"><b id="pDogruluk">–</b><span>Doğruluk</span></div>
+      </div>
+    </section>
+
+    <!-- Hesap: misafirken giriş/kayıt formu, girişliyken hesap bilgileri -->
+    <section class="profil-kart">
+      <h2>Hesap</h2>
+      <p id="hesapYukleniyor" class="soluk-yazi">Yükleniyor…</p>
+
+      <div id="hesapMisafir" hidden>
+        <p class="soluk-yazi">Misafir olarak oynuyorsun. Puanlarını kaybetmemek ve her cihazdan devam etmek için giriş yap ya da hesap aç.</p>
+
+        <div class="sekmeler" role="tablist">
+          <button id="sekmeGiris" class="sekme aktif" role="tab" type="button">Giriş yap</button>
+          <button id="sekmeKayit" class="sekme" role="tab" type="button">Hesap aç</button>
+        </div>
+
+        <form id="girisForm" class="giris-form" novalidate>
+          <label class="alan">
+            <span>E-posta</span>
+            <input id="gEposta" type="email" autocomplete="email" placeholder="ornek@eposta.com" required>
+          </label>
+          <label class="alan">
+            <span>Şifre</span>
+            <input id="gSifre" type="password" autocomplete="current-password" placeholder="En az 6 karakter" required minlength="6">
+          </label>
+          <label id="sifre2Satir" class="alan" hidden>
+            <span>Şifre (tekrar)</span>
+            <input id="gSifre2" type="password" autocomplete="new-password">
+          </label>
+
+          <p id="gMesaj" class="mesaj" hidden></p>
+
+          <button id="gGonder" class="ok ana genis" type="submit">Giriş yap</button>
+          <button id="sifremiUnuttum" class="baglanti" type="button">Şifremi unuttum</button>
+        </form>
+      </div>
+
+      <div id="hesapUye" hidden>
+        <p><span class="soluk-yazi">E-posta:</span> <b id="hesapEposta"></b></p>
+        <p id="dogrulamaUyari" class="uyari" hidden>
+          E-posta adresin henüz doğrulanmadı.
+          <button id="dogrulamaTekrar" class="baglanti" type="button">Doğrulama e-postasını tekrar gönder</button>
+        </p>
+        <div class="hesap-dugmeler">
+          <a id="yonetimLink" class="ok ana" href="yonetim.html" target="_blank" rel="noopener" hidden>Yönetim paneli ↗</a>
+          <button id="cikisBtn" class="ok" type="button">Çıkış yap</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="profil-kart">
+      <h2>Son cevaplar</h2>
+      <ul id="pSon" class="son-liste"></ul>
+    </section>
+
+    <button id="pSifirla" class="sifirla">İstatistikleri sıfırla</button>
+  </main>
+
+  <script src="ikonlar.js"></script>
+  <script src="profil.js"></script>
+  <script src="profil-sayfa.js"></script>
+  <script type="module" src="hesap.js"></script>
+</body>
+</html>

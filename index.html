@@ -3,30 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VoArabic</title>
+  <title>MashadArabic</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Üst şerit (HUD): logo ve kullanıcı -->
+  <header class="hud">
+    <div class="hud-ic ">
+      <a href="./" class="hud-logo"><h1>Mashad<span>Arabic</span></h1></a>
+      <a href="profil.html" class="profil-cip" id="profilCip" title="Profilim">
+        <span class="profil-cip-avatar" id="cipAvatar"></span>
+        <span class="profil-cip-metin">
+          <b id="cipAd">Misafir</b>
+          <small><span data-ikon="yildiz"></span> <span id="cipPuan">0</span> puan</small>
+        </span>
+        <i class="artis" id="artis"></i>
+      </a>
+    </div>
+  </header>
+
   <main class="sahne">
-    <header class="ust">
-      <h1>Vo<span>Arabic</span></h1>
-      <div class="ust-sag">
-        <span class="sayac" id="sayac"></span>
-        <div class="skor">
-          <span class="rozet" title="Puan"><span data-ikon="yildiz"></span> <b id="puan">0</b><i class="artis" id="artis"></i></span>
-          <span class="rozet" id="seriRozet" title="Üst üste doğru (en iyi seri)"><span data-ikon="alev"></span> <b id="seri">0</b> <small id="enIyi"></small></span>
-        </div>
-        <div class="mod" role="group" aria-label="Altyazı">
-          <button id="modAltyazili" class="mod-btn">Altyazılı</button>
-          <button id="modAltyazisiz" class="mod-btn">Altyazısız</button>
-        </div>
-        <button id="girisBtn" class="giris-btn" hidden>Giriş yap</button>
-        <button id="profilBtn" class="profil-btn" title="Profil">
-          <span id="profilBtnAvatar" class="profil-btn-avatar"></span>
-          <span id="profilBtnAd"></span>
-        </button>
-      </div>
-    </header>
 
     <div class="video-alan">
       <div class="oynatici-kutu">
@@ -56,92 +52,20 @@
       </div>
     </div>
 
+    <!-- Oyun çubuğu: altyazı modu, klip sırası ve seri -->
+    <div class="oyun-cubugu">
+      <div class="mod" role="group" aria-label="Altyazı">
+        <button id="modAltyazili" class="mod-btn">Altyazılı</button>
+        <button id="modAltyazisiz" class="mod-btn">Altyazısız</button>
+      </div>
+      <div class="cubuk-sag">
+        <span class="sayac" id="sayac"></span>
+        <span class="rozet" id="seriRozet" title="Üst üste doğru cevap"><span data-ikon="alev"></span> <b id="seri">0</b> <small id="enIyi"></small></span>
+      </div>
+    </div>
+
     <p class="hata" id="hata" hidden></p>
   </main>
-
-  <dialog id="profilPanel" class="panel">
-    <div class="panel-ic">
-      <header class="panel-ust">
-        <h2>Profil</h2>
-        <button id="pKapat" class="kapat" title="Kapat (Esc)">✕</button>
-      </header>
-
-      <!-- Hesap durumu: hesap.js doldurur -->
-      <div class="hesap-kutu" id="hesapKutu">
-        <div id="hesapMisafir" hidden>
-          <p>Misafir olarak oynuyorsun. Puanların sadece bu tarayıcıda saklanıyor.</p>
-          <button id="pGiris" class="ok ana">Giriş yap / Hesap aç</button>
-        </div>
-        <div id="hesapUye" hidden>
-          <p><span class="soluk-yazi">Hesap:</span> <b id="hesapEposta"></b></p>
-          <p id="dogrulamaUyari" class="uyari" hidden>
-            E-posta adresin henüz doğrulanmadı.
-            <button id="dogrulamaTekrar" class="baglanti">Doğrulama e-postasını tekrar gönder</button>
-          </p>
-          <button id="cikisBtn" class="ok">Çıkış yap</button>
-        </div>
-      </div>
-
-      <div class="kimlik">
-        <div id="pAvatar" class="buyuk-avatar"></div>
-        <label class="ad-alan">
-          <span>Adın</span>
-          <input id="pAd" type="text" maxlength="24" placeholder="Adını yaz" autocomplete="off">
-        </label>
-      </div>
-      <div id="pAvatarlar" class="avatarlar"></div>
-
-      <div class="istatistikler">
-        <div class="kutu"><b id="pToplam">0</b><span>Toplam puan</span></div>
-        <div class="kutu"><b id="pBugun">0</b><span>Bugünkü puan</span></div>
-        <div class="kutu"><b id="pGunSeri">0</b><span><i data-ikon="takvim"></i> Gün serisi</span></div>
-        <div class="kutu"><b id="pCevaplanan">0</b><span>Cevaplanan</span></div>
-        <div class="kutu"><b id="pDogruluk">–</b><span>Doğruluk</span></div>
-        <div class="kutu"><b id="pEnIyi">0</b><span><i data-ikon="alev"></i> En iyi seri</span></div>
-      </div>
-
-      <h3>Son cevaplar</h3>
-      <ul id="pSon" class="son-liste"></ul>
-
-      <button id="pSifirla" class="sifirla">İstatistikleri sıfırla</button>
-    </div>
-  </dialog>
-
-  <dialog id="girisPanel" class="panel giris-panel">
-    <div class="panel-ic">
-      <header class="panel-ust">
-        <div class="sekmeler" role="tablist">
-          <button id="sekmeGiris" class="sekme aktif" role="tab">Giriş yap</button>
-          <button id="sekmeKayit" class="sekme" role="tab">Hesap aç</button>
-        </div>
-        <button id="gKapat" class="kapat" title="Kapat (Esc)">✕</button>
-      </header>
-
-      <form id="girisForm" class="giris-form" novalidate>
-        <label id="adSatir" class="alan" hidden>
-          <span>Adın</span>
-          <input id="gAd" type="text" maxlength="24" autocomplete="nickname" placeholder="Adın (isteğe bağlı)">
-        </label>
-        <label class="alan">
-          <span>E-posta</span>
-          <input id="gEposta" type="email" autocomplete="email" placeholder="ornek@eposta.com" required>
-        </label>
-        <label class="alan">
-          <span>Şifre</span>
-          <input id="gSifre" type="password" autocomplete="current-password" placeholder="En az 6 karakter" required minlength="6">
-        </label>
-        <label id="sifre2Satir" class="alan" hidden>
-          <span>Şifre (tekrar)</span>
-          <input id="gSifre2" type="password" autocomplete="new-password">
-        </label>
-
-        <p id="gMesaj" class="mesaj" hidden></p>
-
-        <button id="gGonder" class="ok ana genis" type="submit">Giriş yap</button>
-        <button id="sifremiUnuttum" class="baglanti" type="button">Şifremi unuttum</button>
-      </form>
-    </div>
-  </dialog>
 
   <script src="data.js"></script>
   <script src="ikonlar.js"></script>

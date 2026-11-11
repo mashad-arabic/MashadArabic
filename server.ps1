@@ -1,4 +1,4 @@
-# voarabic yerel sunucusu: http://localhost:8080/
+# MashadArabic yerel sunucusu: http://localhost:8080/
 # Calistirmak icin: powershell -ExecutionPolicy Bypass -File server.ps1
 param([int]$Port = 8080)
 
@@ -19,7 +19,7 @@ $types = @{
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
-Write-Host "voarabic sunucusu calisiyor: http://localhost:$Port/"
+Write-Host "MashadArabic sunucusu calisiyor: http://localhost:$Port/"
 
 while ($listener.IsListening) {
   $ctx = $listener.GetContext()
