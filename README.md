@@ -1,2 +1,2 @@
 # MashadArabic
-Arabic version of voscreen. Studentmade site.
+Learn Arabic with clips and dialogues. 7/24, Free, Efficient.
