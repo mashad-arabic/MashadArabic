@@ -302,7 +302,8 @@ kbd {
 .tekrar-dugme { background: var(--kart); white-space: nowrap; }
 .tekrar-dugme:not(:disabled):hover { background: var(--kart-hover); }
 
-/* ---------- Videonun üstündeki katman: altyazı, şıklar, oklar ---------- */
+/* ---------- Videonun içindeki alan: altyazı, şıklar, oklar ----------
+   Sinema altyazısı gibi videonun alt kısmında, büyük yazıyla durur. */
 .katman {
   position: absolute;
   left: 0;
@@ -310,17 +311,17 @@ kbd {
   bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 48px 16px 16px;
+  align-items: stretch;
+  gap: 12px;
+  padding: 60px 18px 18px;
   border-radius: 0 0 var(--r-buyuk) var(--r-buyuk);
   pointer-events: none; /* boş kısımlar videoyu engellemesin */
 }
 .katman > * { pointer-events: auto; animation: belir .25s ease-out; }
 @keyframes belir { from { opacity: 0; transform: translateY(8px); } }
-
-/* İçinde görünen bir şey varsa alttan koyulaşan gölge (yazılar okunsun) */
+/* Bir şey görünürken alttan hafif koyulaşma: yazı okunsun, yüzler kapanmasın */
 .katman:has(> :not(.bekliyor):not([hidden])) {
-  background: linear-gradient(to bottom, transparent, rgba(11, 18, 34, .6) 35%, rgba(11, 18, 34, .9));
+  background: linear-gradient(to bottom, transparent, rgba(5, 9, 18, .55) 45%, rgba(5, 9, 18, .8));
 }
 .katman .bekliyor { display: none !important; }
 
@@ -328,13 +329,13 @@ kbd {
   margin: 0;
   align-self: center;
   max-width: 100%;
-  padding: 2px 18px 8px;
-  border-radius: var(--r-kucuk);
-  background: rgba(11, 18, 34, .6);
-  font-size: clamp(1.4rem, 3.8vw, 2.2rem);
-  line-height: 1.7;
+  padding: 0 14px 6px;
+  font-size: clamp(1.8rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.6;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .9), 0 0 18px rgba(0, 0, 0, .7);
 }
 
 .secenekler { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -345,17 +346,17 @@ kbd {
   gap: 12px;
   min-height: 60px;
   padding: 10px 16px;
-  border: 1px solid rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .16);
   border-radius: var(--r-orta);
-  background: rgba(26, 37, 64, .85);
-  backdrop-filter: blur(8px);
+  background: rgba(17, 26, 46, .72);
+  backdrop-filter: blur(10px);
   color: var(--yazi);
-  font-size: 1rem;
+  font-size: 1.02rem;
   text-align: left;
   cursor: pointer;
   transition: background .15s, border-color .15s, transform .1s;
 }
-.secenek:not(:disabled):hover { background: rgba(35, 48, 86, .95); border-color: var(--vurgu); }
+.secenek:not(:disabled):hover { background: rgba(35, 48, 86, .9); border-color: var(--vurgu); transform: translateY(-1px); }
 .secenek:not(:disabled):active { transform: scale(.98); }
 .secenek:disabled { cursor: default; }
 .secenek kbd { flex: none; }
@@ -391,7 +392,7 @@ kbd {
 .ok.ana:not(:disabled):hover { background: var(--vurgu); filter: brightness(1.07); }
 .ok.kucuk { padding: 7px 13px; font-size: .84rem; }
 .ok.genis { width: 100%; }
-.katman .ok:not(.ana) { background: rgba(26, 37, 64, .85); backdrop-filter: blur(8px); }
+.katman .ok:not(.ana) { background: rgba(17, 26, 46, .72); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .16); }
 
 .baglanti {
   padding: 0;
@@ -866,17 +867,16 @@ li.yanlis .isaret { color: var(--yanlis); }
 /* =========================================================
    Uygulama düzeni: sol menü + bölümler
    ========================================================= */
-.hud-ic.tam { max-width: 1240px; }
+/* Üst şerit ve menü tam genişlikte: logo ve menü sol köşede, profil sağ köşede */
+.hud-ic.tam { max-width: none; padding: 8px 28px 8px 22px; }
 
 .duzen {
   display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-columns: 264px minmax(0, 1fr);
   width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
   flex: 1;
 }
-.duzen .sahne { max-width: 940px; padding: 28px 28px 56px; }
+.duzen .sahne { max-width: 1060px; padding: 32px 40px 64px; }
 
 .yan-menu {
   position: sticky;
@@ -888,7 +888,23 @@ li.yanlis .isaret { color: var(--yanlis); }
   gap: 4px;
   padding: 24px 14px;
   border-right: 1px solid var(--cizgi);
+  background: color-mix(in srgb, var(--zemin-derin) 55%, transparent);
 }
+.menu-baslik {
+  margin: 0 10px 8px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--soluk) 70%, transparent);
+}
+
+/* Video, ekrana sığacak kadar büyük olsun; altındaki şıklarla birlikte kaydırmadan görünsün */
+section[data-gorunum="dinleme"] { --video-genislik: min(100%, max(560px, calc((100vh - 300px) * 16 / 9))); }
+section[data-gorunum="dinleme"] .bolum-bas,
+section[data-gorunum="dinleme"] .video-alan,
+section[data-gorunum="dinleme"] .oyun-cubugu,
+section[data-gorunum="dinleme"] .kisayollar { width: var(--video-genislik); margin-inline: auto; }
 
 .menu-oge {
   display: flex;
@@ -945,7 +961,7 @@ li.yanlis .isaret { color: var(--yanlis); }
 .halka { flex: none; width: 44px; height: 44px; transform: rotate(-90deg); }
 .halka.buyuk { width: 64px; height: 64px; }
 .halka circle { fill: none; stroke-width: 5; }
-.halka-zemin { stroke: var(--zemin-derin); }
+.halka-zemin { stroke: color-mix(in srgb, var(--cizgi) 80%, transparent); }
 .halka-dolu { stroke: var(--turkuaz); stroke-linecap: round; transition: stroke-dashoffset .6s ease-out; }
 
 /* Bölüm başlığı */
@@ -1365,7 +1381,7 @@ button.profil-cip { border: 0; font: inherit; cursor: pointer; max-width: none; 
   .menu-ikon { width: 38px; height: 34px; border-radius: 11px; background: transparent; }
   .menu-yazi b { font-size: .74rem; }
   .menu-yazi small { display: none; }
-  .menu-hedef { display: none; }
+  .menu-hedef, .menu-baslik { display: none; }
 
   .bolum-bas { align-items: flex-start; }
   .bolum-bas p { font-size: .92rem; }
@@ -1602,4 +1618,45 @@ label.acilir-oge { position: relative; }
   /* Alt menüde 5 bölüm sığsın */
   .menu-yazi b { font-size: .68rem; }
   .menu-ikon { width: 34px; }
+}
+
+/* =========================================================
+   Son rötuşlar: sayfa geçişi, menü hover, kart ve şık hisleri
+   ========================================================= */
+/* Bölüm açılırken yumuşak giriş */
+.gorunum:not([hidden]) { animation: sayfa-gel .35s cubic-bezier(.2, .7, .2, 1); }
+@keyframes sayfa-gel { from { opacity: 0; transform: translateY(10px); } }
+
+/* Menü: üzerine gelince ikon safrana döner */
+.menu-oge:hover .menu-ikon { color: var(--vurgu); background: var(--kart-hover); }
+.menu-oge.aktif:hover .menu-ikon { color: var(--vurgu-yazi); background: var(--vurgu); }
+.menu-oge.aktif { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vurgu) 22%, transparent); }
+
+/* Menü altındaki günlük hedef kartı biraz daha belirgin */
+.menu-hedef { background: color-mix(in srgb, var(--kart) 55%, transparent); transition: background .15s, border-color .15s; }
+.menu-hedef.tamam { background: color-mix(in srgb, var(--turkuaz) 8%, var(--kart)); }
+
+/* Video çerçevesi: ince safran ışıltı */
+.oynatici-kutu { box-shadow: 0 0 0 1px var(--cizgi), 0 30px 70px -30px rgba(0, 0, 0, .8), 0 0 80px -40px rgba(244, 183, 64, .25); }
+
+/* Şıkların numara rozeti safran olsun */
+.secenek kbd { color: var(--vurgu); border-color: color-mix(in srgb, var(--vurgu) 45%, transparent); }
+
+/* Bölüm başlıklarına ince ayraç */
+.bolum-bas { padding-bottom: 16px; border-bottom: 1px solid color-mix(in srgb, var(--cizgi) 60%, transparent); }
+
+/* Oyun çubuğu: kutu içinde dursun */
+section[data-gorunum="dinleme"] .oyun-cubugu {
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--cizgi) 70%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--zemin-derin) 60%, transparent);
+}
+
+@media (max-width: 760px) {
+  section[data-gorunum="dinleme"] .oyun-cubugu { border-radius: var(--r-orta); }
+  .menu-oge.aktif { box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gorunum:not([hidden]) { animation: none; }
 }
