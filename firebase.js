@@ -16,8 +16,15 @@ export const firebaseHazir = (async () => {
   const auth = fb.getAuth(uygulama);
   auth.languageCode = "tr"; // doğrulama/sıfırlama e-postaları Türkçe gelsin
   const db = fs.getFirestore(uygulama);
-  return { auth, db, fb, fs };
+  return { app: uygulama, auth, db, fb, fs };
 })();
+
+// Firebase Storage (yalnızca yönetim panelinde, video dosyası yüklerken gerekir)
+let depoSozu = null;
+export function depoHazir(f) {
+  depoSozu ??= import(`${SDK}/firebase-storage.js`).then((st) => ({ st, depo: st.getStorage(f.app) }));
+  return depoSozu;
+}
 
 // Kullanıcı yönetici mi? (yoneticiler/{uid} belgesi varsa evet.
 // Bu belgeyi yalnızca Firebase konsolundan eklemek mümkün.)

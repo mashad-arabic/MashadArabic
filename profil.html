@@ -4,33 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Profilim · MashadArabic</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
-  <!-- Üst şerit (HUD): logo ve kullanıcı -->
   <header class="hud">
     <div class="hud-ic dar">
-      <a href="./" class="hud-logo"><h1>Mashad<span>Arabic</span></h1></a>
-      <a href="./" class="hud-dugme">← Oyuna dön</a>
+      <a href="./" class="hud-logo" aria-label="MashadArabic ana sayfa">
+        <span class="logo-ar" lang="ar">مشهد</span>
+        <span class="logo-tr">Mashad<b>Arabic</b></span>
+      </a>
+      <a href="./" class="hud-dugme">Oyuna dön</a>
     </div>
   </header>
 
   <main class="sahne profil-sahne">
 
-    <!-- Kimlik: büyük avatar, ad, puan -->
+    <!-- Kimlik: fotoğraf, ad, puan ve seviye -->
     <section class="profil-bas">
-      <div id="pAvatar" class="dev-avatar"></div>
-      <div class="profil-bas-metin">
-        <input id="pAd" class="ad-girisi" type="text" maxlength="24" placeholder="Adını yaz" autocomplete="off" aria-label="Adın">
-        <p class="profil-alt">
-          <span><span data-ikon="yildiz"></span> <b id="pToplam">0</b> puan</span>
-          <span id="pDurum" class="soluk-yazi"></span>
-        </p>
+      <div class="profil-kapak" aria-hidden="true"></div>
+      <div class="profil-bas-ic">
+        <div class="foto-cerceve">
+          <div id="pAvatar" class="dev-avatar"></div>
+          <label class="foto-dugme" title="Fotoğraf yükle">
+            <input id="pFotoDosya" type="file" accept="image/*" hidden>
+            <span data-ikon="kamera"></span>
+            <span class="gizli-metin">Fotoğraf yükle</span>
+          </label>
+        </div>
+        <div class="profil-bas-metin">
+          <input id="pAd" class="ad-girisi" type="text" maxlength="24" placeholder="Adını yaz" autocomplete="off" aria-label="Adın">
+          <p class="profil-alt">
+            <span class="puan-yazi"><span data-ikon="yildiz"></span> <b id="pToplam">0</b> puan</span>
+            <span id="pDurum" class="soluk-yazi"></span>
+          </p>
+          <div class="seviye">
+            <div class="seviye-ust">
+              <b id="pSeviye">Seviye 1</b>
+              <span id="pSeviyeKalan" class="soluk-yazi"></span>
+            </div>
+            <div class="seviye-cubuk"><i id="pSeviyeCubuk"></i></div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="profil-kart">
-      <h2>Profil fotoğrafı</h2>
+      <h2>Fotoğrafın</h2>
+      <div class="foto-secenek">
+        <label class="ok ana foto-yukle">
+          <input id="pFotoDosya2" type="file" accept="image/*" hidden>
+          Kendi fotoğrafını yükle
+        </label>
+        <button id="pFotoKaldir" class="ok" type="button" hidden>Fotoğrafı kaldır</button>
+      </div>
+      <p id="pFotoMesaj" class="mesaj" hidden></p>
+      <p class="soluk-yazi kucuk-yazi">Ya da hazır avatarlardan birini seç:</p>
       <div id="pAvatarlar" class="avatarlar"></div>
     </section>
 
@@ -86,7 +117,7 @@
           <button id="dogrulamaTekrar" class="baglanti" type="button">Doğrulama e-postasını tekrar gönder</button>
         </p>
         <div class="hesap-dugmeler">
-          <a id="yonetimLink" class="ok ana" href="yonetim.html" target="_blank" rel="noopener" hidden>Yönetim paneli ↗</a>
+          <a id="yonetimLink" class="ok ana" href="yonetim.html" hidden>Yönetim paneli</a>
           <button id="cikisBtn" class="ok" type="button">Çıkış yap</button>
         </div>
       </div>

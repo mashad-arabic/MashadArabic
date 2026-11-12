@@ -4,73 +4,441 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MashadArabic</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
-<body>
-  <!-- Üst şerit (HUD): logo ve kullanıcı -->
+<body class="uygulama" data-gorunum="ana">
+  <!-- Üst şerit: logo ve profil menüsü -->
   <header class="hud">
-    <div class="hud-ic ">
-      <a href="./" class="hud-logo"><h1>Mashad<span>Arabic</span></h1></a>
-      <a href="profil.html" class="profil-cip" id="profilCip" title="Profilim">
-        <span class="profil-cip-avatar" id="cipAvatar"></span>
-        <span class="profil-cip-metin">
-          <b id="cipAd">Misafir</b>
-          <small><span data-ikon="yildiz"></span> <span id="cipPuan">0</span> puan</small>
-        </span>
-        <i class="artis" id="artis"></i>
+    <div class="hud-ic tam">
+      <a href="#ana" class="hud-logo" aria-label="MashadArabic ana sayfa">
+        <span class="logo-ar" lang="ar">مشهد</span>
+        <span class="logo-tr">Mashad<b>Arabic</b></span>
       </a>
+
+      <div class="profil-menu" id="profilMenu">
+        <button class="profil-cip" id="profilCip" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profilAcilir">
+          <span class="profil-cip-avatar" id="cipAvatar"></span>
+          <span class="profil-cip-metin">
+            <b id="cipAd">Misafir</b>
+            <small><span data-ikon="yildiz"></span> <span id="cipPuan">0</span> puan</small>
+          </span>
+          <span class="profil-cip-ok" aria-hidden="true">▾</span>
+          <i class="artis" id="artis"></i>
+        </button>
+
+        <div class="acilir" id="profilAcilir" role="menu" hidden>
+          <div class="acilir-bas">
+            <span class="acilir-avatar" id="acAvatar"></span>
+            <span>
+              <b id="acAd">Misafir</b>
+              <small id="acSeviye">Seviye 1</small>
+            </span>
+          </div>
+          <button type="button" role="menuitem" class="acilir-oge" id="acIlerleme">İlerlemem</button>
+          <label role="menuitem" class="acilir-oge" tabindex="0">
+            Fotoğrafını değiştir
+            <input type="file" accept="image/*" data-foto-yukle hidden>
+          </label>
+          <a role="menuitem" class="acilir-oge" href="profil.html">Profili düzenle</a>
+          <a role="menuitem" class="acilir-oge" id="yonetimLink" href="yonetim.html" hidden>Yönetim paneli</a>
+          <div id="hesapMisafir" hidden>
+            <a role="menuitem" class="acilir-oge vurgulu" href="profil.html">Giriş yap ya da hesap aç</a>
+          </div>
+          <div id="hesapUye" hidden>
+            <button type="button" role="menuitem" class="acilir-oge" id="cikisBtn">Çıkış yap</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="sahne">
+  <div class="duzen">
+    <!-- ================= SOL MENÜ ================= -->
+    <nav class="yan-menu" aria-label="Bölümler">
+      <p class="menu-baslik">Bölümler</p>
+      <a href="#ana" class="menu-oge" data-gorunum="ana">
+        <span class="menu-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v10.5a1 1 0 0 0 1 1h4v-6h3v6h4a1 1 0 0 0 1-1V9"/></svg>
+        </span>
+        <span class="menu-yazi"><b>Bugün</b><small>Özet ve günün kelimesi</small></span>
+      </a>
+      <a href="#dinleme" class="menu-oge" data-gorunum="dinleme">
+        <span class="menu-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M10 9.2v5.6l4.8-2.8z" class="dolu"/></svg>
+        </span>
+        <span class="menu-yazi"><b>Dinleme</b><small>Kısa sahneleri anla</small></span>
+      </a>
+      <a href="#kelimeler" class="menu-oge" data-gorunum="kelimeler">
+        <span class="menu-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2.5"/><path d="M8 3h10.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>
+        </span>
+        <span class="menu-yazi"><b>Kelimeler</b><small>Kartlarla ezberle</small></span>
+      </a>
+      <a href="#eslestirme" class="menu-oge" data-gorunum="eslestirme">
+        <span class="menu-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="7" height="6" rx="2"/><rect x="14.5" y="14" width="7" height="6" rx="2"/><path d="M9.5 7h3a2 2 0 0 1 2 2v8"/></svg>
+        </span>
+        <span class="menu-yazi"><b>Eşleştirme</b><small>Kelimeyi anlamıyla bul</small></span>
+      </a>
+      <a href="#harfler" class="menu-oge" data-gorunum="harfler">
+        <span class="menu-ikon harf-ikon" aria-hidden="true" lang="ar">ب</span>
+        <span class="menu-yazi"><b>Harfler</b><small>Alfabeyi öğren</small></span>
+      </a>
 
-    <div class="video-alan">
-      <div class="oynatici-kutu">
-        <div id="oynatici"></div>
-        <!-- Videoya tıklanmasını ve YouTube menülerini engeller -->
-        <div class="kalkan"></div>
-        <!-- Başlangıçta ve yeni video yüklenirken YouTube ekranını gizleyen perde -->
-        <div class="perde" id="perde">
-          <button id="basla" class="basla" disabled>Yükleniyor…</button>
+      <!-- Günlük hedef -->
+      <button type="button" class="menu-hedef" id="menuHedef" title="İlerlememi aç">
+        <svg class="halka" viewBox="0 0 44 44" aria-hidden="true">
+          <circle cx="22" cy="22" r="18" class="halka-zemin"/>
+          <circle cx="22" cy="22" r="18" class="halka-dolu" id="hedefHalka"/>
+        </svg>
+        <span class="menu-yazi">
+          <b><span id="hedefPuan">0</span> / <span id="hedefToplam">50</span></b>
+          <small id="hedefYazi">Günlük hedef</small>
+        </span>
+      </button>
+    </nav>
+
+    <main class="sahne">
+
+      <!-- ================= BUGÜN (ANA SAYFA) ================= -->
+      <section class="gorunum" data-gorunum="ana" aria-labelledby="anaSelam">
+        <div class="karsi">
+          <div class="karsi-desen" aria-hidden="true"></div>
+          <label class="karsi-foto" title="Fotoğrafını değiştir">
+            <span class="karsi-avatar" id="anaAvatar"></span>
+            <span class="foto-rozet" aria-hidden="true"><span data-ikon="kamera"></span></span>
+            <span class="gizli-metin">Fotoğrafını değiştir</span>
+            <input type="file" accept="image/*" data-foto-yukle hidden>
+          </label>
+          <div class="karsi-metin">
+            <p class="karsi-ar" lang="ar" dir="rtl" id="anaSelamAr">مَرْحَبًا</p>
+            <h1 id="anaSelam">Merhaba</h1>
+            <p class="karsi-alt" id="anaAlt"></p>
+          </div>
+          <button type="button" class="karsi-hedef" id="anaHedef" title="İlerlememi aç">
+            <svg class="halka buyuk" viewBox="0 0 44 44" aria-hidden="true">
+              <circle cx="22" cy="22" r="18" class="halka-zemin"/>
+              <circle cx="22" cy="22" r="18" class="halka-dolu" id="anaHedefHalka"/>
+            </svg>
+            <span><b><span id="anaHedefPuan">0</span> / <span id="anaHedefToplam">50</span></b><small id="anaHedefYazi">Günlük hedef</small></span>
+          </button>
         </div>
-        <button id="tekrar" class="tekrar" title="Tekrar dinle (R)" hidden>↻</button>
+
+        <h2 class="ara-baslik">Ne çalışmak istersin?</h2>
+        <div class="modul-izgara">
+          <a href="#dinleme" class="modul-kart" data-renk="safran">
+            <span class="modul-kart-ikon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M10 9.2v5.6l4.8-2.8z" class="dolu"/></svg>
+            </span>
+            <b>Dinleme</b>
+            <span class="modul-kart-acik">Gerçek konuşmalardan kısa sahneler izle, ne dendiğini seç.</span>
+            <span class="modul-kart-alt" id="anaDinleme">Henüz klip cevaplamadın</span>
+          </a>
+          <a href="#kelimeler" class="modul-kart" data-renk="turkuaz">
+            <span class="modul-kart-ikon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="15" rx="2.5"/><path d="M8 3h10.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>
+            </span>
+            <b>Kelimeler</b>
+            <span class="modul-kart-acik">Kartları çevir, günlük hayatın temel kelimelerini ezberle.</span>
+            <span class="modul-kart-cubuk"><i id="anaKelCubuk"></i></span>
+            <span class="modul-kart-alt" id="anaKel">0 / 48 kelime</span>
+          </a>
+          <a href="#eslestirme" class="modul-kart" data-renk="kobalt">
+            <span class="modul-kart-ikon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="7" height="6" rx="2"/><rect x="14.5" y="14" width="7" height="6" rx="2"/><path d="M9.5 7h3a2 2 0 0 1 2 2v8"/></svg>
+            </span>
+            <b>Eşleştirme</b>
+            <span class="modul-kart-acik">Arapça kelimeyi Türkçe anlamıyla en kısa sürede eşleştir.</span>
+            <span class="modul-kart-alt" id="anaEs">Rekorun yok, ilk turu dene</span>
+          </a>
+          <a href="#harfler" class="modul-kart" data-renk="mercan">
+            <span class="modul-kart-ikon harf-ikon" aria-hidden="true" lang="ar">ب</span>
+            <b>Harfler</b>
+            <span class="modul-kart-acik">28 harfi, yazılışlarını ve seslerini adım adım öğren.</span>
+            <span class="modul-kart-cubuk"><i id="anaHarfCubuk"></i></span>
+            <span class="modul-kart-alt" id="anaHarf">0 / 28 harf</span>
+          </a>
+        </div>
+
+        <div class="gunun-kelimesi">
+          <div class="gk-metin">
+            <h2>Günün kelimesi</h2>
+            <p class="gk-tr" id="gkTr"></p>
+            <p class="soluk-yazi" id="gkOkunus"></p>
+          </div>
+          <p class="gk-ar" lang="ar" dir="rtl" id="gkAr"></p>
+          <button type="button" class="ok yuvarlak" id="gkDinle" data-ses aria-label="Günün kelimesini dinle" hidden>🔊</button>
+        </div>
+      </section>
+
+      <!-- ================= DİNLEME ================= -->
+      <section class="gorunum" data-gorunum="dinleme" aria-labelledby="bDinleme" hidden>
+        <div class="bolum-bas">
+          <div>
+            <h1 id="bDinleme">Dinleme</h1>
+            <p>Kısa bir sahne izle, ne dendiğini seç.</p>
+          </div>
+        </div>
+
+        <div class="video-alan">
+          <div class="oynatici-kutu">
+            <div id="oynatici"></div>
+            <!-- Yüklenen ya da bağlantıyla eklenen (mp4 vb.) videolar burada oynar -->
+            <video id="videoOynatici" class="video-oynatici" playsinline preload="auto" hidden></video>
+            <!-- Videoya tıklanmasını ve YouTube menülerini engeller -->
+            <div class="kalkan"></div>
+            <!-- Başlangıçta, tur sonunda ve yeni video yüklenirken videonun üstünü örten perde -->
+            <div class="perde" id="perde">
+              <div class="karsilama" id="karsilama">
+                <p class="karsilama-ar" lang="ar" dir="rtl">أهلاً وسهلاً</p>
+                <p class="karsilama-tr">Sahneyi izle, iki çeviriden doğrusunu seç.</p>
+              </div>
+              <div class="tur-ozet" id="turOzet" hidden>
+                <h2>Tur bitti</h2>
+                <p id="turOzetMetin"></p>
+              </div>
+              <button id="basla" class="basla" disabled>Yükleniyor…</button>
+            </div>
+          </div>
+
+          <!-- Altyazı, şıklar ve oklar videonun alt kısmının üstünde durur -->
+          <div class="katman">
+            <p class="altyazi" dir="rtl" lang="ar" id="altyazi" hidden></p>
+
+            <div class="secenekler bekliyor" id="secenekler" hidden>
+              <button class="secenek" data-i="0"><kbd>1</kbd><span></span></button>
+              <button class="secenek" data-i="1"><kbd>2</kbd><span></span></button>
+            </div>
+
+            <nav class="gecis bekliyor" id="gecis" hidden>
+              <button id="onceki" class="ok" title="Önceki klip (←)">Önceki</button>
+              <button id="sonraki" class="ok ana" title="Sonraki klip (→)">Sonraki</button>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Oyun çubuğu: altyazı modu, hız, klip sırası ve seri -->
+        <div class="oyun-cubugu">
+          <div class="cubuk-sol">
+            <div class="mod" role="group" aria-label="Altyazı">
+              <button id="modAltyazili" class="mod-btn">Altyazılı</button>
+              <button id="modAltyazisiz" class="mod-btn">Altyazısız</button>
+            </div>
+            <div class="mod" id="hizGrup" role="group" aria-label="Oynatma hızı" title="Oynatma hızı (S)">
+              <button class="mod-btn" data-hiz="1">1×</button>
+              <button class="mod-btn" data-hiz="0.75">0.75×</button>
+              <button class="mod-btn" data-hiz="0.5">0.5×</button>
+            </div>
+          </div>
+          <div class="cubuk-sag">
+            <!-- Tekrar dinle: videonun üstünü kapatmasın diye çubukta durur -->
+            <button id="tekrar" class="ok kucuk tekrar-dugme" title="Tekrar dinle (R)" hidden>↻ Tekrar dinle</button>
+            <span class="sayac" id="sayac"></span>
+            <span class="rozet" id="seriRozet" title="Üst üste doğru cevap"><span data-ikon="alev"></span> <b id="seri">0</b> <small id="enIyi"></small></span>
+          </div>
+        </div>
+
+        <p class="kisayollar"><kbd>1</kbd> <kbd>2</kbd> seç · <kbd>R</kbd> tekrar dinle · <kbd>S</kbd> hız · <kbd>←</kbd> <kbd>→</kbd> klipler arası geçiş</p>
+
+        <p class="hata" id="hata" hidden></p>
+      </section>
+
+      <!-- ================= KELİMELER ================= -->
+      <section class="gorunum" data-gorunum="kelimeler" aria-labelledby="bKelimeler" hidden>
+        <div class="bolum-bas">
+          <div>
+            <h1 id="bKelimeler">Kelimeler</h1>
+            <p>Kartı çevir, anlamını gör. Bildiğin kelimeleri işaretle.</p>
+          </div>
+          <div class="bolum-sayi"><b id="kelBilinenSayi">0</b> / <span id="kelToplamSayi">0</span><small>kelime biliyorsun</small></div>
+        </div>
+
+        <div class="cipler" id="kelKategoriler" role="group" aria-label="Kategori"></div>
+
+        <div class="kart-sahne">
+          <button type="button" class="kelime-kart" id="kelKart" aria-label="Kartı çevir">
+            <span class="kart-yuz kart-on">
+              <span class="kart-ar" lang="ar" dir="rtl" id="kelAr"></span>
+              <span class="kart-ipucu">Anlamı için dokun</span>
+            </span>
+            <span class="kart-yuz kart-arka">
+              <span class="kart-tr" id="kelTr"></span>
+              <span class="kart-okunus" id="kelOkunus"></span>
+              <span class="kart-ar-kucuk" lang="ar" dir="rtl" id="kelAr2"></span>
+            </span>
+          </button>
+          <span class="kart-rozet" id="kelRozet" hidden>Biliyorsun</span>
+        </div>
+
+        <div class="kart-bitti" id="kelBitti" hidden>
+          <p class="kart-bitti-ar" lang="ar">أَحْسَنْتَ</p>
+          <p>Bu kategorideki bütün kartları gördün.</p>
+          <button type="button" class="ok ana" id="kelBastan">Baştan başla</button>
+        </div>
+
+        <div class="kart-dugmeler" id="kelDugmeler">
+          <button type="button" class="ok" id="kelTekrar"><kbd>1</kbd> Tekrar göster</button>
+          <button type="button" class="ok yuvarlak" id="kelDinle" data-ses title="Dinle" aria-label="Kelimeyi dinle" hidden>🔊</button>
+          <button type="button" class="ok ana" id="kelBiliyorum"><kbd>2</kbd> Biliyorum</button>
+        </div>
+        <p class="kart-sayac" id="kelSayac"></p>
+      </section>
+
+      <!-- ================= EŞLEŞTİRME ================= -->
+      <section class="gorunum" data-gorunum="eslestirme" aria-labelledby="bEslestirme" hidden>
+        <div class="bolum-bas">
+          <div>
+            <h1 id="bEslestirme">Eşleştirme</h1>
+            <p>Soldaki Arapça kelimeyi sağdaki Türkçe karşılığıyla eşleştir.</p>
+          </div>
+          <div class="bolum-sayi"><b id="esEnIyi">–</b><small>en iyi süre</small></div>
+        </div>
+
+        <div class="cipler" id="esKategoriler" role="group" aria-label="Kategori"></div>
+
+        <div class="eslestirme" id="esAlan">
+          <div class="es-sutun" id="esArapca"></div>
+          <div class="es-sutun" id="esTurkce"></div>
+        </div>
+
+        <div class="es-sonuc" id="esSonuc" hidden>
+          <p class="es-sonuc-baslik" id="esSonucBaslik">Tamamlandı</p>
+          <p id="esSonucMetin"></p>
+        </div>
+
+        <div class="es-alt">
+          <span class="es-sure"><span id="esSure">0,0</span> sn · <span id="esHata">0</span> hata</span>
+          <button type="button" class="ok ana" id="esYeni">Yeni tur</button>
+        </div>
+      </section>
+
+      <!-- ================= HARFLER ================= -->
+      <section class="gorunum" data-gorunum="harfler" aria-labelledby="bHarfler" hidden>
+        <div class="bolum-bas">
+          <div>
+            <h1 id="bHarfler">Harfler</h1>
+            <p>Arap alfabesinin 28 harfi. Bir harfe dokun, yazılışlarını ve örnek kelimesini gör.</p>
+          </div>
+          <div class="bolum-sayi"><b id="hfOgrenilenSayi">0</b> / 28<small>harf öğrendin</small></div>
+        </div>
+
+        <div class="sekmeler" role="tablist">
+          <button type="button" class="sekme aktif" id="hfSekmeAlfabe" role="tab">Alfabe</button>
+          <button type="button" class="sekme" id="hfSekmeTest" role="tab">Harf testi</button>
+        </div>
+
+        <div class="harf-duzen" id="hfAlfabe">
+          <div class="harf-izgara" id="hfIzgara" dir="rtl"></div>
+
+          <div class="harf-detay" id="hfDetay">
+            <div class="harf-buyuk" lang="ar" id="hfBuyuk"></div>
+            <h2 id="hfAd"></h2>
+            <p class="soluk-yazi" id="hfSes"></p>
+            <div class="harf-bicimler" id="hfBicimler"></div>
+            <div class="harf-ornek">
+              <span class="harf-ornek-ar" lang="ar" dir="rtl" id="hfOrnekAr"></span>
+              <span><b id="hfOrnekTr"></b> <span class="soluk-yazi" id="hfOrnekOkunus"></span></span>
+            </div>
+            <div class="harf-dugmeler">
+              <button type="button" class="ok" id="hfDinle" data-ses hidden>🔊 Dinle</button>
+              <button type="button" class="ok ana" id="hfOgrendim">Öğrendim</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="harf-test" id="hfTest" hidden>
+          <div class="test-kart">
+            <span class="test-harf" lang="ar" id="hfTestHarf"></span>
+            <p>Bu harfin adı ne?</p>
+            <div class="test-secenekler" id="hfTestSecenekler"></div>
+            <button type="button" class="ok ana" id="hfTestSonraki" hidden>Sonraki harf</button>
+          </div>
+          <p class="test-skor" id="hfTestSkor"></p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Kısa bildirimler (ör. "Fotoğrafın güncellendi") -->
+  <div class="bildirim" id="bildirim" role="status" aria-live="polite" hidden></div>
+
+  <!-- ================= İLERLEME PENCERESİ ================= -->
+  <dialog class="pencere" id="ilerlemePencere" aria-labelledby="ipAd">
+    <div class="pencere-bas">
+      <label class="pencere-foto" title="Fotoğrafını değiştir">
+        <span class="pencere-avatar" id="ipAvatar"></span>
+        <span class="foto-rozet kucuk" aria-hidden="true"><span data-ikon="kamera"></span></span>
+        <span class="gizli-metin">Fotoğrafını değiştir</span>
+        <input type="file" accept="image/*" data-foto-yukle hidden>
+      </label>
+      <div class="pencere-kim">
+        <h2 id="ipAd">Misafir</h2>
+        <p><b id="ipSeviye">Seviye 1</b> · <span id="ipPuan">0</span> puan</p>
       </div>
+      <button type="button" class="kapat" id="ipKapat" aria-label="Kapat">✕</button>
+    </div>
 
-      <!-- Altyazı, şıklar ve oklar videonun alt kısmının üstünde durur -->
-      <div class="katman">
-        <p class="altyazi" dir="rtl" lang="ar" id="altyazi" hidden></p>
+    <div class="seviye">
+      <div class="seviye-cubuk"><i id="ipSeviyeCubuk"></i></div>
+      <p class="soluk-yazi kucuk-yazi" id="ipSeviyeKalan"></p>
+    </div>
 
-        <div class="secenekler bekliyor" id="secenekler" hidden>
-          <button class="secenek" data-i="0"><kbd>1</kbd><span></span></button>
-          <button class="secenek" data-i="1"><kbd>2</kbd><span></span></button>
-        </div>
-
-        <nav class="gecis bekliyor" id="gecis" hidden>
-          <button id="onceki" class="ok" title="Önceki klip (←)">← Önceki</button>
-          <button id="sonraki" class="ok ana" title="Sonraki klip (→ veya Enter)">Sonraki →</button>
-        </nav>
+    <div class="ip-hedef">
+      <svg class="halka buyuk" viewBox="0 0 44 44" aria-hidden="true">
+        <circle cx="22" cy="22" r="18" class="halka-zemin"/>
+        <circle cx="22" cy="22" r="18" class="halka-dolu" id="ipHedefHalka"/>
+      </svg>
+      <div>
+        <b>Bugün <span id="ipBugun">0</span> / <span id="ipHedef">50</span> puan</b>
+        <p class="soluk-yazi kucuk-yazi" id="ipHedefYazi"></p>
       </div>
     </div>
 
-    <!-- Oyun çubuğu: altyazı modu, klip sırası ve seri -->
-    <div class="oyun-cubugu">
-      <div class="mod" role="group" aria-label="Altyazı">
-        <button id="modAltyazili" class="mod-btn">Altyazılı</button>
-        <button id="modAltyazisiz" class="mod-btn">Altyazısız</button>
-      </div>
-      <div class="cubuk-sag">
-        <span class="sayac" id="sayac"></span>
-        <span class="rozet" id="seriRozet" title="Üst üste doğru cevap"><span data-ikon="alev"></span> <b id="seri">0</b> <small id="enIyi"></small></span>
-      </div>
+    <div class="ip-izgara">
+      <div class="kutu"><b id="ipGunSeri">0</b><span><i data-ikon="takvim"></i> Gün serisi</span></div>
+      <div class="kutu"><b id="ipEnIyi">0</b><span><i data-ikon="alev"></i> En iyi seri</span></div>
+      <div class="kutu"><b id="ipCevaplanan">0</b><span>Cevaplanan klip</span></div>
+      <div class="kutu"><b id="ipDogruluk">–</b><span>Dinleme doğruluğu</span></div>
     </div>
 
-    <p class="hata" id="hata" hidden></p>
-  </main>
+    <h3>Bölümler</h3>
+    <ul class="modul-liste">
+      <li>
+        <span class="modul-ad">Kelimeler</span>
+        <span class="modul-cubuk"><i id="ipKelCubuk"></i></span>
+        <span class="modul-deger" id="ipKelDeger">0 / 48</span>
+      </li>
+      <li>
+        <span class="modul-ad">Harfler</span>
+        <span class="modul-cubuk"><i id="ipHarfCubuk"></i></span>
+        <span class="modul-deger" id="ipHarfDeger">0 / 28</span>
+      </li>
+      <li>
+        <span class="modul-ad">Eşleştirme</span>
+        <span class="modul-deger genis" id="ipEsDeger">Henüz oynamadın</span>
+      </li>
+    </ul>
+
+    <h3>Son 7 gün</h3>
+    <div class="hafta" id="ipHafta"></div>
+
+    <div class="pencere-alt">
+      <a class="ok" href="profil.html">Profili düzenle</a>
+      <button type="button" class="ok ana" id="ipDevam">Devam et</button>
+    </div>
+  </dialog>
 
   <script src="data.js"></script>
+  <script src="icerik.js"></script>
+  <script src="video-kaynak.js"></script>
   <script src="ikonlar.js"></script>
   <script src="profil.js"></script>
+  <script src="menu.js"></script>
   <script src="app.js"></script>
+  <script src="bolumler.js"></script>
   <script type="module" src="hesap.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 </body>
