@@ -15,7 +15,9 @@ service cloud.firestore {
     // Kullanıcı profilleri: herkes kendi profilini okur/yazar, yönetici hepsini okur
     match /kullanicilar/{uid} {
       allow read: if girisli() && (request.auth.uid == uid || yonetici());
-      allow write: if girisli() && request.auth.uid == uid;
+      // Profil fotoğrafı küçültülmüş olarak belgede durur; çok büyük yazılmasın
+      allow write: if girisli() && request.auth.uid == uid
+        && (!('foto' in request.resource.data.profil) || request.resource.data.profil.foto.size() < 200000);
     }
 
     // Yönetici listesi: kişi yalnızca kendisinin yönetici olup olmadığını görebilir
@@ -24,17 +26,19 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Klip geçerli mi? Kaynak ya YouTube (youtube: 11 karakterlik kimlik)
+    // ya da kendi videomuz (video: https adresi — yüklenen dosya, Google Drive, Dropbox…)
+    function klipGecerli(d) {
+      return d.start is number && d.end is number && d.end > d.start
+        && d.arapca is string && d.dogru is string && d.yanlis is string
+        && (('youtube' in d && d.youtube is string)
+            || ('video' in d && d.video is string && d.video.matches('https://.+')));
+    }
+
     // Klipler: herkes okur (oyun için), yalnızca yönetici ekler/düzenler/siler
     match /klipler/{id} {
       allow read: if true;
-      allow create, update: if yonetici()
-        && request.resource.data.youtube is string
-        && request.resource.data.start is number
-        && request.resource.data.end is number
-        && request.resource.data.end > request.resource.data.start
-        && request.resource.data.arapca is string
-        && request.resource.data.dogru is string
-        && request.resource.data.yanlis is string;
+      allow create, update: if yonetici() && klipGecerli(request.resource.data);
       allow delete: if yonetici();
     }
   }

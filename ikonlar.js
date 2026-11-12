@@ -30,7 +30,12 @@ const IKONLAR = {
       <rect x="41" y="31" width="8" height="7" rx="2"/><rect x="15" y="43" width="8" height="7" rx="2"/>
       <rect x="28" y="43" width="8" height="7" rx="2"/>
     </g>
-    <rect x="41" y="43" width="8" height="7" rx="2" fill="#2fbf71"/>`)
+    <rect x="41" y="43" width="8" height="7" rx="2" fill="#2fbf71"/>`),
+
+  kamera: svg(`
+    <path d="M10 22 a6 6 0 0 1 6 -6 h7 l4 -6 h10 l4 6 h7 a6 6 0 0 1 6 6 v24 a6 6 0 0 1 -6 6 H16 a6 6 0 0 1 -6 -6 Z"
+      fill="none" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round"/>
+    <circle cx="32" cy="33" r="9" fill="none" stroke="currentColor" stroke-width="4.5"/>`)
 };
 
 // ---------- Avatarlar ----------
@@ -163,6 +168,17 @@ function avatarBul(id) {
 function avatarSvg(id) {
   const a = avatarBul(id);
   return svg(`<circle cx="32" cy="32" r="32" fill="${a.zemin}"/>${a.ciz}`, a.ad);
+}
+
+// Öğrencinin yüklediği fotoğraf (data:image/... adresi) varsa onu, yoksa çizilmiş avatarı göster.
+// Fotoğraf başka kullanıcıdan gelebilir (yönetim listesi), bu yüzden yalnızca güvenli
+// base64 resim adresleri kabul edilir.
+const FOTO_KALIBI = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
+function fotoGecerli(foto) {
+  return typeof foto === "string" && foto.length < 200000 && FOTO_KALIBI.test(foto);
+}
+function avatarHtml(avatarId, foto) {
+  return fotoGecerli(foto) ? `<img src="${foto}" alt="">` : avatarSvg(avatarId);
 }
 
 // Sayfadaki <span data-ikon="..."> yerlerine simgeleri koy

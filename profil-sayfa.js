@@ -1,29 +1,65 @@
-// Profil sayfası: ad, avatar, istatistikler ve son cevaplar.
+// Profil sayfası: ad, fotoğraf/avatar, seviye, istatistikler ve son cevaplar.
 // (Hesap bölümünü hesap.js yönetir.)
 
 (() => {
   const $ = (id) => document.getElementById(id);
   const ui = {
     avatar: $("pAvatar"), ad: $("pAd"), toplam: $("pToplam"), avatarlar: $("pAvatarlar"),
+    seviye: $("pSeviye"), seviyeKalan: $("pSeviyeKalan"), seviyeCubuk: $("pSeviyeCubuk"),
+    fotoDosyalar: [$("pFotoDosya"), $("pFotoDosya2")], fotoKaldir: $("pFotoKaldir"), fotoMesaj: $("pFotoMesaj"),
     bugun: $("pBugun"), gunSeri: $("pGunSeri"), enIyi: $("pEnIyi"),
     cevaplanan: $("pCevaplanan"), dogruluk: $("pDogruluk"),
     son: $("pSon"), sifirla: $("pSifirla")
   };
 
+  // ---------- Fotoğraf ----------
+  function fotoMesaj(metin, tur = "hata") {
+    ui.fotoMesaj.textContent = metin;
+    ui.fotoMesaj.className = `mesaj ${tur}`;
+    ui.fotoMesaj.hidden = !metin;
+  }
+
+  async function fotoSecildi(girdi) {
+    const dosya = girdi.files[0];
+    girdi.value = ""; // aynı dosya yeniden seçilebilsin
+    if (!dosya) return;
+    try {
+      await Profil.fotoDosyadan(dosya);
+      fotoMesaj("Fotoğrafın güncellendi.", "basari");
+    } catch (h) {
+      fotoMesaj(h.message);
+    }
+  }
+
+  ui.fotoDosyalar.forEach((girdi) => girdi.addEventListener("change", () => fotoSecildi(girdi)));
+  ui.fotoKaldir.addEventListener("click", () => {
+    Profil.avatarDegistir(Profil.veri().avatar);
+    fotoMesaj("");
+  });
+
+  // ---------- Çizim ----------
   function ciz() {
     const p = Profil.veri();
+    const fotoVar = fotoGecerli(p.foto);
 
-    ui.avatar.innerHTML = avatarSvg(p.avatar);
+    ui.avatar.innerHTML = avatarHtml(p.avatar, p.foto);
     if (document.activeElement !== ui.ad) ui.ad.value = p.ad;
     ui.toplam.textContent = p.toplamPuan.toLocaleString("tr-TR");
+    ui.fotoKaldir.hidden = !fotoVar;
+
+    const sv = Profil.seviye();
+    ui.seviye.textContent = `Seviye ${sv.n}`;
+    ui.seviyeKalan.textContent = `Sonraki seviyeye ${sv.kalan.toLocaleString("tr-TR")} puan`;
+    ui.seviyeCubuk.style.width = `${Math.round(sv.oran * 100)}%`;
 
     ui.avatarlar.replaceChildren(...AVATARLAR.map((a) => {
       const b = document.createElement("button");
       b.type = "button";
-      b.className = "avatar-sec" + (a.id === p.avatar ? " secili" : "");
+      b.className = "avatar-sec" + (!fotoVar && a.id === p.avatar ? " secili" : "");
       b.title = a.ad;
+      b.setAttribute("aria-label", a.ad);
       b.innerHTML = avatarSvg(a.id);
-      b.addEventListener("click", () => Profil.avatarDegistir(a.id));
+      b.addEventListener("click", () => { Profil.avatarDegistir(a.id); fotoMesaj(""); });
       return b;
     }));
 
@@ -36,7 +72,7 @@
     if (!p.son.length) {
       const li = document.createElement("li");
       li.className = "bos";
-      li.textContent = "Henüz cevap yok. Oyuna dönüp birkaç klip izle!";
+      li.textContent = "Henüz cevap yok. Oyuna dönüp birkaç klip izle.";
       ui.son.replaceChildren(li);
       return;
     }

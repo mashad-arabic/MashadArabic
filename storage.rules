@@ -1,0 +1,18 @@
+rules_version = '2';
+// Firebase Storage kuralları: yönetim panelinden yüklenen klip videoları.
+// Firebase konsolu → Storage → Rules sekmesine yapıştırıp "Yayınla"ya basın.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /videolar/{dosya} {
+      // Oyun videoları herkese açık
+      allow read: if true;
+      // Yalnızca yöneticiler (Firestore'da yoneticiler/{uid} belgesi olanlar) yükler/siler.
+      // Yükleme: en fazla 200 MB ve yalnızca video dosyası.
+      allow write: if request.auth != null
+        && firestore.exists(/databases/(default)/documents/yoneticiler/$(request.auth.uid))
+        && (request.resource == null
+            || (request.resource.size < 200 * 1024 * 1024
+                && request.resource.contentType.matches('video/.*')));
+    }
+  }
+}
